@@ -47,18 +47,11 @@ const initial = () => {
   })
 
   User.create({
-    email: process.env.SURVEYOR_EMAIL,
+    email: 'surveyor@testing.com',
     name: 'Surveyor 1',
     phone_num: '628123918231',
-    password: bcrypt.hashSync(process.env.SURVEYOR_PASSWORD, 10),
+    password: bcrypt.hashSync('qwe123@@', 10),
   }).then((user) => user.setRoles([2]))
-
-  User.create({
-    email: process.env.USER_EMAIL,
-    name: 'User 1',
-    phone_num: '6281239123121',
-    password: bcrypt.hashSync(process.env.USER_PASSWORD, 10),
-  }).then((user) => user.setRoles([3]))
 }
 
 app.get('/', (req, res) => {
