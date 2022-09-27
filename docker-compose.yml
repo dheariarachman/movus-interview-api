@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  database:
+    image: postgres:12-alpine
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_PORT=${DB_PORT}
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  api:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    stdin_open: true
+    tty: true
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=${DB_PORT}
+      - DB_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - database
+
+volumes:
+  db:
